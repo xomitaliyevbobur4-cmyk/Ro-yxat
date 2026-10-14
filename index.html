@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f2b705">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Табель">
+<title>Табель — учёт рабочих</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eef0f2;--card:#fff;--ink:#1c2530;--mute:#6b7683;--line:#d9dde2;--acc:#f2b705;--accink:#1c2530;--ok:#2e7d4f;--half:#c98a00;--bad:#c0392b;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141a21;--card:#1e262f;--ink:#eef0f2;--mute:#97a3b0;--line:#2f3a46;--ok:#4cc17f;--half:#f2b705;--bad:#ff7a6b}}
+:root[data-theme="dark"]{--bg:#141a21;--card:#1e262f;--ink:#eef0f2;--mute:#97a3b0;--line:#2f3a46;--ok:#4cc17f;--half:#f2b705;--bad:#ff7a6b}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 Archivo,system-ui,sans-serif}
+main{max-width:520px;margin:0 auto;padding:16px}
+h1{font-size:26px;font-weight:800;margin:4px 0 12px}
+h2{font-size:20px;font-weight:800;margin:0}
+.bar{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-bottom:12px}
+.sum{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px}
+.box b{display:block;font-size:22px;font-weight:800}
+.box span,.mute{color:var(--mute);font-size:14px}
+.row{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:8px;color:inherit;font:inherit;cursor:pointer}
+.av{width:42px;height:42px;border-radius:50%;background:var(--acc);color:var(--accink);display:grid;place-items:center;font-weight:800;flex:none}
+.grow{flex:1;min-width:0}.grow b{display:block}
+.dot{width:12px;height:12px;border-radius:50%;background:var(--line);flex:none}.dot.on{background:var(--ok)}.dot.h{background:var(--half)}
+button{font:inherit;cursor:pointer}
+.btn{background:var(--acc);color:var(--accink);border:0;border-radius:10px;padding:12px 16px;font-weight:800}
+.btn.g{background:transparent;color:var(--ink);border:1px solid var(--line);font-weight:600}
+.btn.w{width:100%}
+.btn.d{background:transparent;color:var(--bad);border:1px solid var(--bad);font-weight:600}
+input,select{font:inherit;width:100%;padding:11px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink)}
+label{display:block;font-size:14px;color:var(--mute);margin:10px 0 4px}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin:8px 0 12px}
+.cal .h{font-size:12px;color:var(--mute);text-align:center}
+.cal button{aspect-ratio:1;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);font-weight:600;padding:0}
+.cal button.on{background:var(--ok);border-color:var(--ok);color:#fff}
+.cal button.h{background:var(--half);border-color:var(--half);color:#1c2530}
+.cal button.td{outline:2px solid var(--ink);outline-offset:1px}
+.leg{display:flex;gap:12px;font-size:13px;color:var(--mute);flex-wrap:wrap}
+.leg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:4px}
+.calc{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--line)}
+.calc.t{font-size:20px;font-weight:800;border:0;padding-top:10px}
+.adv{display:flex;justify-content:space-between;gap:8px;padding:6px 0;border-bottom:1px solid var(--line);font-size:15px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.mon{display:flex;align-items:center;justify-content:space-between}
+.mon button{width:44px;height:44px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:18px}
+.hero{background:#1c2530;color:#fff;border-radius:14px;overflow:hidden;margin-bottom:12px}
+.hz{height:12px;background:repeating-linear-gradient(-45deg,#f2b705 0 14px,#1c2530 14px 28px)}
+.hin{padding:16px}.hd{color:#aab4bf;font-size:14px}
+.big{display:flex;align-items:baseline;gap:10px;margin:2px 0 10px}.big b{font-size:72px;line-height:1;font-weight:800;color:#f2b705}
+.pb{height:8px;background:#34414f;border-radius:4px;overflow:hidden}.pb i{display:block;height:100%;background:#f2b705}
+.tt{margin-top:12px;color:#d5dbe1}.tt b{color:#fff;font-size:20px}
+.av{overflow:hidden}.av img{width:100%;height:100%;object-fit:cover}
+.id{background:var(--card);border:2px solid var(--ink);border-radius:14px;overflow:hidden}
+.id .top{background:#f2b705;color:#1c2530;padding:8px 14px;font-weight:800;display:flex;justify-content:space-between;font-size:14px}
+.id .body{display:grid;grid-template-columns:108px 1fr;gap:14px;padding:14px}
+.ph{width:108px;height:140px;border-radius:8px;background:var(--line);overflow:hidden;display:grid;place-items:center;border:0;padding:0;color:var(--mute);font-weight:800;font-size:30px;text-align:center}
+.ph img{width:100%;height:100%;object-fit:cover}.ph small{display:block;font-size:12px;font-weight:600}
+.id dl{margin:0;min-width:0}.id dt{font-size:12px;color:var(--mute)}.id dd{margin:0 0 8px;font-weight:600;overflow-wrap:anywhere}
+.mrz{font:13px/1.5 ui-monospace,Menlo,monospace;letter-spacing:1px;padding:8px 14px;background:var(--line);overflow:hidden;white-space:nowrap}
+:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+</style>
+</head>
+<body>
+<main id="app"></main>
+<script>
+var KEY="tabel_ru_v1",MON=["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"],MONG=["января","февраля","марта","апреля","мая","июня","июля","августа","сентября","октября","ноября","декабря"];
+var S={w:[],view:"list",cur:null,y:new Date().getFullYear(),m:new Date().getMonth(),add:false,del:false};
+try{var raw=localStorage.getItem(KEY);if(raw)S.w=JSON.parse(raw)}catch(e){}
+if(!S.w.length){var N=[["Азиз Каримов","Мастер",3500],["Бобур Алиев","Помощник",2500],["Жасур Турсунов","Мастер",3600],["Дильшод Рахимов","Помощник",2400],["Сардор Юсупов","Мастер",3400],["Отабек Назаров","Помощник",2500],["Улугбек Хасанов","Мастер",3500],["Фарход Исмоилов","Помощник",2300],["Рустам Кодиров","Мастер",3700],["Шахзод Умаров","Помощник",2400]];
+S.w=N.map(function(x,i){var D={},t=new Date().getDate();for(var d=1;d<=t;d++){if((d+i)%7!=0)D[key(S.y,S.m,d)]=((d*(i+2))%11==0)?.5:1}return{id:i+1,no:i+1,name:x[0],phone:"",role:x[1],rate:x[2],photo:"",days:D,adv:[]}})}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S.w))}catch(e){}}
+function $(h){return h}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function fmt(n){return Math.round(n).toLocaleString("ru-RU").replace(/\u00a0/g," ")+" ₽"}
+function key(y,m,d){return y+"-"+String(m+1).padStart(2,"0")+"-"+String(d).padStart(2,"0")}
+function pre(y,m){return y+"-"+String(m+1).padStart(2,"0")+"-"}
+function worked(w){var p=pre(S.y,S.m),t=0;for(var k in w.days)if(k.indexOf(p)==0)t+=w.days[k];return t}
+function advs(w){var p=pre(S.y,S.m);return w.adv.filter(function(a){return a.d.indexOf(p)==0})}
+function advSum(w){return advs(w).reduce(function(s,a){return s+a.sum},0)}
+function earned(w){return worked(w)*w.rate}
+function today(){var n=new Date();return key(n.getFullYear(),n.getMonth(),n.getDate())}
+function ini(n){return n.trim().split(/\s+/).map(function(x){return x[0]}).slice(0,2).join("").toUpperCase()}
+function find(id){return S.w.filter(function(w){return w.id==id})[0]}
+function monthBar(){return '<div class="mon"><button data-a="prev" aria-label="Предыдущий месяц">‹</button><b>'+MON[S.m]+' '+S.y+'</b><button data-a="next" aria-label="Следующий месяц">›</button></div>'}
+
+function list(){
+ var td=today(),on=S.w.filter(function(w){return w.days[td]}).length;
+ var tot=S.w.reduce(function(s,w){return s+earned(w)-advSum(w)},0);
+ var n=new Date(),pct=S.w.length?Math.round(on/S.w.length*100):0,WD=["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"];
+ var h='<div class="hero"><div class="hz"></div><div class="hin"><div class="hd">'+WD[n.getDay()]+', '+n.getDate()+' '+MONG[n.getMonth()]+'</div><div class="big"><b>'+on+'</b><span>/ '+S.w.length+' рабочих сегодня на работе</span></div><div class="pb"><i style="width:'+pct+'%"></i></div><div class="tt">К выплате за месяц: <b>'+fmt(tot)+'</b></div></div></div><div style="margin-bottom:12px">'+monthBar()+'</div>';
+ h+=quick();h+='<input id="q" type="search" placeholder="Поиск по имени" aria-label="Поиск" autocomplete="off" value="'+esc(S.q||"")+'" style="margin-bottom:8px"><div id="nf" class="mute" hidden style="margin:8px 0">Такой рабочий не найден.</div>';
+ S.w.forEach(function(w){
+  var d=w.days[td],c=d==1?"on":d==.5?"h":"";
+  h+='<button class="row" data-a="open" data-id="'+w.id+'" data-n="'+esc(w.name.toLowerCase())+'">'+(w.photo?'<span class="av"><img src="'+w.photo+'" alt=""></span>':'<span class="av">'+esc(ini(w.name))+'</span>')+'<span class="grow"><b>'+esc(w.name)+'</b><span class="mute">'+esc(w.role)+' · '+worked(w)+' дн. · '+fmt(earned(w)-advSum(w))+'</span></span><span class="dot '+c+'" title="Сегодня"></span></button>';
+ });
+ if(S.add){
+  h+='<div class="box"><h2>Новый рабочий</h2><label>Имя</label><input id="n"><label>Телефон</label><input id="p" type="tel"><div class="two"><div><label>Должность</label><select id="r"><option>Мастер</option><option>Помощник</option></select></div><div><label>Дневная ставка (₽)</label><input id="s" type="number" inputmode="numeric"></div></div><div class="two" style="margin-top:12px"><button class="btn g" data-a="cancel">Отмена</button><button class="btn" data-a="create">Сохранить</button></div></div>';
+ }else h+='<button class="btn w" data-a="new">Добавить рабочего</button>';
+ return h;
+}
+function profile(){
+ var w=find(S.cur);if(!w){S.view="list";return list()}
+ var td=today(),first=new Date(S.y,S.m,1),off=(first.getDay()+6)%7,days=new Date(S.y,S.m+1,0).getDate();
+ var no=String(w.no||0).padStart(3,"0"),mrz=("RABOCHIY<<"+tr(w.name).toUpperCase().replace(/[^A-Z ]/g,"").trim().replace(/ +/g,"<<")+"<<<<<<<<<<<<<<<<<<<<<<<<<<").slice(0,30).replace(/</g,"&lt;");
+ var h='<div class="bar"><button class="btn g" data-a="back">‹ Список</button></div><div class="id"><div class="top"><span>Бригада · карточка рабочего</span><span>№ '+no+'</span></div><div class="body"><label class="ph" style="position:relative;cursor:pointer">'+(w.photo?'<img src="'+w.photo+'" alt="">':'<span>'+esc(ini(w.name))+'<small>Добавить фото</small></span>')+'<input type="file" id="pf" accept="image/*" aria-label="Добавить фото" style="position:absolute;top:0;left:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:0"></label><dl><dt>Имя</dt><dd>'+esc(w.name)+'</dd><dt>Должность</dt><dd>'+esc(w.role)+'</dd><dt>Телефон</dt><dd>'+(w.phone?'<a href="tel:'+esc(w.phone)+'" style="color:inherit">'+esc(w.phone)+'</a>':'не указан')+'</dd><dt>Дневная ставка</dt><dd>'+fmt(w.rate)+'</dd></dl></div><div class="mrz">'+mrz+'<br>'+no+'&lt;&lt;'+w.rate+'&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div></div>';
+ h+='<div class="two"><div><label>Имя</label><input id="nm" value="'+esc(w.name)+'"></div><div><label>Телефон</label><input id="ph" type="tel" value="'+esc(w.phone)+'" placeholder="+7 ..."></div></div><label>Дневная ставка (₽)</label><input id="rate" type="number" inputmode="numeric" value="'+w.rate+'">';
+ h+=monthBar().replace('class="mon"','class="mon" style="margin-top:14px"');
+ h+='<div class="cal">';["Пн","Вт","Ср","Чт","Пт","Сб","Вс"].forEach(function(x){h+='<span class="h">'+x+'</span>'});
+ for(var i=0;i<off;i++)h+='<span></span>';
+ for(var d=1;d<=days;d++){var k=key(S.y,S.m,d),v=w.days[k];h+='<button data-a="day" data-k="'+k+'" class="'+(v==1?"on":v==.5?"h":"")+(k==td?" td":"")+'" aria-label="'+d+'-й день">'+d+'</button>'}
+ h+='</div><div class="leg"><span><i style="background:var(--ok)"></i>Работал</span><span><i style="background:var(--half)"></i>Полдня</span><span>Нажимайте на день: работал → полдня → нет</span></div>';
+ var e=earned(w),a=advSum(w);
+ h+='<div class="box" style="margin-top:14px"><div class="calc"><span>Отработано дней</span><b>'+worked(w)+'</b></div><div class="calc"><span>Начислено</span><b>'+fmt(e)+'</b></div><div class="calc"><span>Авансы</span><b>− '+fmt(a)+'</b></div><div class="calc t"><span>Остаток</span><span>'+fmt(e-a)+'</span></div></div>';
+ h+='<div class="box" style="margin-top:12px"><h2>Авансы</h2>';
+ var A=advs(w);if(!A.length)h+='<p class="mute">В этом месяце авансов нет.</p>';
+ A.forEach(function(x,i){h+='<div class="adv"><span>'+x.d.slice(8)+'.'+x.d.slice(5,7)+(x.note?' · '+esc(x.note):'')+'</span><span>'+fmt(x.sum)+' <button data-a="deladv" data-i="'+w.adv.indexOf(x)+'" aria-label="Удалить" style="border:0;background:none;color:var(--bad)">✕</button></span></div>'});
+ h+='<div class="two" style="margin-top:10px"><input id="as" type="number" inputmode="numeric" placeholder="Сумма (₽)"><input id="an" placeholder="Комментарий"></div><button class="btn w" style="margin-top:8px" data-a="addadv">Записать аванс</button></div>';
+ h+='<div style="margin-top:16px">'+(S.del?'<button class="btn d w" data-a="del2">Точно удалить? Нажмите ещё раз</button>':'<button class="btn g w" data-a="del">Удалить рабочего</button>')+'</div>';
+ return h;
+}
+function render(){document.getElementById("app").innerHTML=S.view=="list"?list():profile();window.scrollTo(0,0);filt()}
+function filt(){var q=(S.q||"").trim().toLowerCase(),n=0;document.querySelectorAll(".row[data-n]").forEach(function(r){var m=r.dataset.n.indexOf(q)>-1;r.style.display=m?"":"none";if(m)n++});var nf=document.getElementById("nf");if(nf)nf.hidden=!(q&&!n)}
+function tr(t){var M={а:"a",б:"b",в:"v",г:"g",д:"d",е:"e",ё:"e",ж:"zh",з:"z",и:"i",й:"y",к:"k",л:"l",м:"m",н:"n",о:"o",п:"p",р:"r",с:"s",т:"t",у:"u",ф:"f",х:"kh",ц:"ts",ч:"ch",ш:"sh",щ:"shch",ы:"y",э:"e",ю:"yu",я:"ya"};return t.toLowerCase().split("").map(function(c){return M[c]!==undefined?M[c]:(c=="ъ"||c=="ь")?"":c}).join("")}
+function shift(n){S.m+=n;if(S.m<0){S.m=11;S.y--}if(S.m>11){S.m=0;S.y++}}
+document.getElementById("app").addEventListener("click",function(ev){
+ var b=ev.target.closest("[data-a]");if(!b)return;var a=b.dataset.a,w=find(S.cur);
+ if(a=="open"){S.msg="";S.cur=b.dataset.id;S.view="profile";S.del=false;render()}
+ else if(a=="all"){allIn()}
+ else if(a=="nl"){nl()}
+ else if(a=="photo"){document.getElementById("pf").click()}
+ else if(a=="back"){S.view="list";render()}
+ else if(a=="prev"){shift(-1);render()}
+ else if(a=="next"){shift(1);render()}
+ else if(a=="new"){S.add=true;render()}
+ else if(a=="cancel"){S.add=false;render()}
+ else if(a=="create"){var n=document.getElementById("n").value.trim();if(!n){document.getElementById("n").focus();return}
+  S.w.push({id:Date.now(),no:S.w.reduce(function(m,x){return Math.max(m,x.no||0)},0)+1,photo:"",name:n,phone:document.getElementById("p").value.trim(),role:document.getElementById("r").value,rate:+document.getElementById("s").value||0,days:{},adv:[]});S.add=false;save();render()}
+ else if(a=="day"){var k=b.dataset.k,v=w.days[k];if(!v)w.days[k]=1;else if(v==1)w.days[k]=.5;else delete w.days[k];save();var sc=window.scrollY;render();window.scrollTo(0,sc)}
+ else if(a=="addadv"){var s=+document.getElementById("as").value;if(!s){document.getElementById("as").focus();return}
+  var n2=new Date(),d=(n2.getFullYear()==S.y&&n2.getMonth()==S.m)?key(S.y,S.m,n2.getDate()):key(S.y,S.m,1);
+  w.adv.push({d:d,sum:s,note:document.getElementById("an").value.trim()});save();render()}
+ else if(a=="deladv"){w.adv.splice(+b.dataset.i,1);save();var sc2=window.scrollY;render();window.scrollTo(0,sc2)}
+ else if(a=="del"){S.del=true;render()}
+ else if(a=="del2"){S.w=S.w.filter(function(x){return x.id!=w.id});S.view="list";S.del=false;save();render()}
+});
+document.getElementById("app").addEventListener("input",function(ev){if(ev.target.id=="q"){S.q=ev.target.value;filt()}});
+document.getElementById("app").addEventListener("change",function(ev){
+ var w=find(S.cur),id=ev.target.id;if(!w)return;
+ if(id=="pf"){var f=ev.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(){var im=new Image();im.onload=function(){var c=document.createElement("canvas"),k=Math.min(1,320/Math.max(im.width,im.height));c.width=im.width*k;c.height=im.height*k;c.getContext("2d").drawImage(im,0,0,c.width,c.height);w.photo=c.toDataURL("image/jpeg",.75);save();render()};im.onerror=function(){if(r.result.length<450000){w.photo=r.result;save();render()}};im.src=r.result};r.readAsDataURL(f);return}
+ if(id=="rate")w.rate=+ev.target.value||0;else if(id=="nm"){if(!ev.target.value.trim())return;w.name=ev.target.value.trim()}else if(id=="ph")w.phone=ev.target.value.trim();else return;
+ save();var sc=window.scrollY;render();window.scrollTo(0,sc)
+});
+var SAMPLE=null;
+function quick(){var h='<button class="btn w" data-a="all" style="margin-bottom:8px">Все сегодня на работе</button>';
+ if(SAMPLE)h+='<div class="box" style="margin-bottom:12px"><label style="margin-top:0" for="nl">Напишите словами</label><textarea id="nl" rows="2" placeholder="Например: Азиз и Бобур не вышли, Жасуру выдал аванс 1000" style="width:100%;font:inherit;padding:11px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink)"></textarea><button class="btn w" data-a="nl" style="margin-top:8px">Записать в табель</button></div>';
+ if(S.msg)h+='<div class="box" role="status" style="margin-bottom:12px">'+esc(S.msg)+'</div>';return h}
+function allIn(){var t=today();S.w.forEach(function(w){if(!w.days[t])w.days[t]=1});save();S.msg="Все отмечены как вышедшие сегодня. Не вышедших укажите словами или измените в карточке.";render()}
+var busy=false;
+async function nl(){var el=document.getElementById("nl");if(!el||busy)return;var txt=el.value.trim();if(!txt){el.focus();return}
+ busy=true;S.msg="Думаю...";render();var td=today();
+ var P='Сегодня '+td+'. Рабочие (id: имя): '+S.w.map(function(w){return w.id+': '+w.name}).join('; ')+'.\nБригадир написал: "'+txt+'"\nПреврати это в записи табеля. Верни только JSON, без другого текста: {"days":[{"id":число,"date":"YYYY-MM-DD","value":1 или 0.5 или 0}],"adv":[{"id":число,"date":"YYYY-MM-DD","sum":число,"note":"текст"}],"unclear":"непонятные места или пустая строка"}. Если дата не указана, это сегодня. "Не вышел" = value 0, "полдня" = 0.5, "вышел/работал" = 1. Если написано "все", это все рабочие. Имя может быть написано частично (только имя или фамилия, возможно латиницей). Сумма аванса в рублях.';
+ try{var r=await SAMPLE.json(P,{modelTier:"quick"}),nd=0,na=0,ok=/^\d{4}-\d\d-\d\d$/;
+  (r.days||[]).forEach(function(x){var w=find(x.id);if(!w||!ok.test(x.date||td))return;var d=x.date||td;if(+x.value>0)w.days[d]=+x.value>=1?1:.5;else delete w.days[d];nd++});
+  (r.adv||[]).forEach(function(x){var w=find(x.id);if(!w||!(+x.sum>0))return;w.adv.push({d:ok.test(x.date||"")?x.date:td,sum:+x.sum,note:x.note||""});na++});
+  save();S.msg=(nd||na)?"Записано: отметок дней — "+nd+", авансов — "+na+"."+(r.unclear?" Непонятно: "+r.unclear:""):"Ничего не найдено. "+(r.unclear||"Напишите точнее: кто и что.")}
+ catch(e){S.msg=e&&e.code=="not_granted"?"Доступ не разрешён. Для этой функции нужно разрешение.":"Не получилось. Попробуйте ещё раз или измените в карточке."}
+ busy=false;render()}
+render();
+try{if(window.claude&&claude.use)claude.use("sample").then(function(f){if(f){SAMPLE=f;if(S.view=="list"&&!S.add)render()}}).catch(function(){})}catch(e){}
+</script>
+<script>if("serviceWorker"in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})}</script>
+</body>
+</html>
